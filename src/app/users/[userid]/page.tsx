@@ -1,10 +1,11 @@
-import { getUserPosts } from "@/api/posts";
-import { getUserTodos } from "@/api/todos";
-import { getUser } from "@/api/users";
+import { getUserPosts } from "@/db/posts";
+import { getUserTodos } from "@/db/todos";
+import { getUser } from "@/db/users";
 import { PostCard, SkeletonPostCard } from "@/components/PostCard";
 import { Skeleton, SkeletonList } from "@/components/Skeleton";
 import { TodoItem } from "@/components/TodoItem";
 import { Suspense } from "react";
+import { notFound } from "next/navigation";
 
 export default function UserItem({
   params: { userid },
@@ -87,20 +88,21 @@ export default function UserItem({
 
 async function UserDetails({ userId }: { userId: string }) {
   const user = await getUser(userId);
+  if (user == null) return notFound();
   return (
     <>
       <h1 className='page-title'>{user.name}</h1>
       <div className='page-subtitle'>{user.email}</div>
       <div>
-        <b>Company:</b> {user.company.name}
+        <b>Company:</b> {user.companyName}
       </div>
       <div>
         <b>Website:</b> {user.website}
       </div>
       <div>
         <b>Address:</b>{" "}
-        {`${user.address.street} ${user.address.suite}
-      ${user.address.city} ${user.address.zipcode}`}
+        {`${user.street} ${user.suite}
+      ${user.city} ${user.zipcode}`}
       </div>
     </>
   );

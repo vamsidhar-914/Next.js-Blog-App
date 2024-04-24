@@ -1,9 +1,10 @@
-import { getPostComments } from "@/api/comments";
-import { getPost } from "@/api/posts";
-import { getUser } from "@/api/users";
+import { getPostComments } from "@/db/comments";
+import { getPost } from "@/db/posts";
+import { getUser } from "@/db/users";
 import { Skeleton, SkeletonList } from "@/components/Skeleton";
 import Link from "next/link";
 import { Suspense } from "react";
+import { notFound } from "next/navigation";
 
 export default function PostPage({
   params: { postid },
@@ -66,6 +67,8 @@ export default function PostPage({
 async function PostDetails({ postId }: { postId: string }) {
   const post = await getPost(postId);
 
+  if (post == null) return notFound();
+
   return (
     <>
       <h1 className='page-title'>{post.title}</h1>
@@ -89,6 +92,8 @@ async function PostDetails({ postId }: { postId: string }) {
 
 async function UserDetails({ userId }: { userId: number }) {
   const user = await getUser(userId);
+
+  if (user == null) return notFound();
 
   return <Link href={`/users/${user.id}`}>{user.name}</Link>;
 }
