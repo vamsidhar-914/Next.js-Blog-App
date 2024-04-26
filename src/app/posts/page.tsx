@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { getUsers } from "@/db/users";
 import { Skeleton, SkeletonList } from "@/components/Skeleton";
 import { SearchForm } from "./SearchForm";
+import Link from "next/link";
 
 type PageProps = {
   searchParams: { query?: string; userId?: string };
@@ -16,7 +17,17 @@ export default async function PostPage({
   const posts = await getPosts();
   return (
     <>
-      <h1 className='page-title'>Posts</h1>
+      <h1 className='page-title'>
+        Posts
+        <div className='page-title'>
+          <Link
+            className='btn btn-outline'
+            href='/posts/new'
+          >
+            New
+          </Link>
+        </div>
+      </h1>
 
       <SearchForm userOptions={<UserSelect />} />
 

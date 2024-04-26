@@ -5,6 +5,7 @@ import { Skeleton, SkeletonList } from "@/components/Skeleton";
 import Link from "next/link";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
+import { DeleteButton } from "@/components/DeleteButton";
 
 export default function PostPage({
   params: { postid },
@@ -71,7 +72,18 @@ async function PostDetails({ postId }: { postId: string }) {
 
   return (
     <>
-      <h1 className='page-title'>{post.title}</h1>
+      <h1 className='page-title'>
+        {post.title}
+        <div className='title-btns'>
+          <Link
+            className='btn btn-outline'
+            href={`/posts/${postId}/edit`}
+          >
+            Edit
+          </Link>
+          <DeleteButton postId={postId} />
+        </div>
+      </h1>
       <span className='page-subtitle'>
         By:{" "}
         <Suspense
